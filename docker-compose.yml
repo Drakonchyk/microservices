@@ -1,0 +1,22 @@
+services:
+  facade_service:
+    build: ./facade_service
+    volumes:
+      - ./logging.proto:/app/logging.proto
+    ports:
+      - "5003:5003"
+    depends_on:
+      - logging_service
+      - messages_service
+  
+  logging_service:
+    build: ./logging_service
+    volumes:
+      - ./logging.proto:/app/logging.proto
+    ports:
+      - "50051:50051"
+  
+  messages_service:
+    build: ./messages_service
+    ports:
+      - "5002:5002"
