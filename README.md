@@ -30,7 +30,7 @@ The services communicate using gRPC (for logging) and HTTP (for messages service
 
 ### Clone the Repository
 ```bash
-git clone <repo_url>
+git clone https://github.com/Drakonchyk/microservices.git
 cd microservices
 ```
 
