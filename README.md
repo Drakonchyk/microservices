@@ -30,7 +30,7 @@ The services communicate using gRPC (for logging) and HTTP (for messages service
 
 ### Clone the Repository
 ```bash
-git clone <repo_url>
+git clone https://github.com/Drakonchyk/microservices.git
 cd microservices
 ```
 
@@ -70,7 +70,7 @@ Expected Response:
 ```json
 {
   "logs": ["Hello gRPC"],
-  "message_service": {"message": "not implemented yet"}
+  "messages": {"message": "not implemented yet"}
 }
 ```
 
@@ -96,7 +96,7 @@ curl -X POST http://localhost:5003/send_message -H "Content-Type: application/js
 ```
 Expected Response:
 ```json
-{"id":"some-uuid","message":"gRPC Error: StatusCode.UNAVAILABLE - Unable to connect to Logging Service"}
+{"id":"some-uuid","message":"gRPC Error: ..."}
 ```
 
 ### Restart Logging Service
@@ -113,13 +113,13 @@ Expected Response:
 {"id":"some-uuid","message":"Logged successfully"}
 ```
 
-### Retrieve All Messages (Ensuring Deduplication Works)
+### Retrieve Messages (Ensuring Deduplication Works)
 ```bash
 curl -X GET http://localhost:5003/get_messages
 ```
 Expected Output:
 ```json
-{"logs":["Retry Test", "Final Test"], "message_service": {"message": "not implemented yet"}}
+{"logs":["First Message","Second Message","Final Test"],"messages":{"message":"not implemented yet"}}
 ```
 
 ## Summary
@@ -127,7 +127,7 @@ Expected Output:
 ### Communication Flow
 1. facade_service receives an HTTP POST /send_message request.
 2. It sends the message via gRPC to logging_service (with retries).
-3. logging_service stores messages with deduplication.
+3. logging_service stores messages with deduplication and after restarting it stores previous data.
 4. facade_service fetches logs from logging_service (gRPC) and messages from messages_service (HTTP).
 5. GET /get_messages returns both responses combined.
 
